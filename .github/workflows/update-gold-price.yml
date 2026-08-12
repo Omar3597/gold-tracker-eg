@@ -1,0 +1,27 @@
+name: Update Gold Price
+
+on:
+  schedule:
+    # Every 30 minutes. Tune this — shorter = fresher, but be polite to iSagha's server.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {} # lets you trigger it manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch and parse gold prices
+        run: node scripts/scrape-gold-price.js
+
+      - name: Commit updated prices.json
+        run: |
+          git config user.name "gold-price-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/prices.json
+          git diff --staged --quiet || git commit -m "Update gold prices $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push

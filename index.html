@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Track your Egyptian gold holdings — live prices, profit/loss, portfolio summary. No backend, no sign-up." />
+  <meta name="theme-color" content="#c8a84b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Gold Tracker" />
+
+  <title>Gold Tracker — Egyptian Gold Portfolio</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ HEADER ══════ -->
+<header class="app-header" role="banner">
+  <div class="header-inner">
+    <div class="app-logo">
+      <div class="app-logo-icon" aria-hidden="true">🪙</div>
+      <div>
+        <div class="app-title">Gold Tracker</div>
+        <div class="app-subtitle">Egyptian Gold Portfolio</div>
+      </div>
+    </div>
+
+    <div class="price-ticker" aria-live="polite" aria-label="Live gold price">
+      <span id="ticker-dot" class="ticker-dot stale"></span>
+      <span class="ticker-label" id="ticker-label">Loading…</span>
+      <span class="ticker-karat font-mono" id="ticker-karat-val"></span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════ MAIN CONTENT ════════════ -->
+<main class="app-wrapper" id="main-content">
+
+  <!-- Offline / Error banner -->
+  <div id="offline-banner" class="offline-banner hidden" role="alert">
+    <span aria-hidden="true">⚠</span>
+    <span class="offline-msg"></span>
+  </div>
+
+  <!-- Install prompt banner -->
+  <div id="install-banner" class="install-banner" role="complementary">
+    <div class="install-banner-text">
+      <strong>Install Gold Tracker</strong>
+      Add to your home screen for offline access and quick launch.
+    </div>
+    <button class="btn-install" id="btn-install" onclick="triggerInstall()">Install</button>
+    <button class="btn-install-dismiss" onclick="dismissInstall()" aria-label="Dismiss install prompt">✕</button>
+  </div>
+
+  <!-- ─── PORTFOLIO SUMMARY ──────────────────────────────────────────── -->
+  <section class="summary-section" aria-labelledby="summary-heading">
+    <div class="section-label" id="summary-heading">Portfolio Overview</div>
+    <div class="summary-grid">
+
+      <div class="summary-card">
+        <div class="summary-label">Total Invested</div>
+        <div class="summary-value font-mono" id="total-invested">—</div>
+        <div class="summary-sub text-muted">at purchase price</div>
+      </div>
+
+      <div class="summary-card highlight">
+        <div class="summary-label">Current Value</div>
+        <div class="summary-value font-mono" id="total-value">—</div>
+        <div class="summary-sub text-muted">at today's sell price</div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-label">Total P&amp;L</div>
+        <div class="summary-value font-mono" id="total-pnl">—</div>
+        <div class="summary-sub" id="total-pnl-pct"></div>
+      </div>
+
+    </div>
+
+    <!-- Source / timestamp info -->
+    <div class="prices-info" id="prices-info">
+      <span aria-hidden="true">📡</span>
+      Prices from <a href="https://market.isagha.com/prices/eg" target="_blank" rel="noopener">iSagha</a>
+      · Updated <span id="prices-info-ts">—</span>
+    </div>
+  </section>
+
+  <!-- ─── SINCE LAST VISIT ───────────────────────────────────────────── -->
+  <section class="since-visit-section" id="since-visit-section" aria-labelledby="visit-heading" style="display:none">
+    <div class="section-label" id="visit-heading">Since Last Visit</div>
+    <div class="since-visit-list" id="since-visit-list"></div>
+  </section>
+
+  <!-- ─── HOLDINGS ──────────────────────────────────────────────────── -->
+  <section class="holdings-section" aria-labelledby="holdings-heading">
+    <div class="holdings-header">
+      <div class="section-label" id="holdings-heading">My Holdings</div>
+      <span class="holdings-count" id="holdings-count"></span>
+    </div>
+    <div class="holdings-grid" id="holdings-grid" role="list"></div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════ FAB ═════════════ -->
+<button
+  class="fab"
+  id="fab-add"
+  aria-label="Add gold holding"
+  onclick="openModal()"
+>
+  <span class="fab-icon" aria-hidden="true">＋</span>
+  Add Holding
+</button>
+
+<!-- ═══════════════════════════════════════ ADD / EDIT MODAL ════════════ -->
+<div
+  class="modal-overlay"
+  id="modal-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+>
+  <div class="modal">
+    <div class="modal-handle" aria-hidden="true"></div>
+    <h2 class="modal-title" id="modal-title">Add Holding</h2>
+
+    <form id="holding-form" novalidate>
+
+      <!-- Karat -->
+      <div class="form-group">
+        <label class="form-label" for="field-karat">Karat</label>
+        <select class="form-control" id="field-karat" required>
+          <option value="24">24 Karat — عيار 24</option>
+          <option value="22">22 Karat — عيار 22</option>
+          <option value="21" selected>21 Karat — عيار 21</option>
+          <option value="18">18 Karat — عيار 18</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <!-- Grams -->
+        <div class="form-group">
+          <label class="form-label" for="field-grams">Weight (grams)</label>
+          <input
+            class="form-control"
+            type="number"
+            id="field-grams"
+            min="0.01"
+            step="0.01"
+            placeholder="e.g. 5"
+            required
+          />
+        </div>
+
+        <!-- Buy price per gram -->
+        <div class="form-group">
+          <label class="form-label" for="field-buy-price">Buy Price / gram (EGP)</label>
+          <input
+            class="form-control"
+            type="number"
+            id="field-buy-price"
+            min="0.01"
+            step="0.01"
+            placeholder="e.g. 3800"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Purchase date -->
+      <div class="form-group">
+        <label class="form-label" for="field-bought-at">Purchase Date <span style="color:var(--text-muted)">(optional)</span></label>
+        <input
+          class="form-control"
+          type="date"
+          id="field-bought-at"
+        />
+        <div class="form-hint">Used for your records only.</div>
+      </div>
+
+      <!-- Error -->
+      <div class="form-error" id="form-error" role="alert"></div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit" id="btn-save-holding">Save Holding</button>
+        <button class="btn btn-ghost" type="button" onclick="closeModal()">Cancel</button>
+        <button
+          class="btn btn-ghost"
+          type="button"
+          id="btn-delete-modal"
+          style="display:none; color:var(--loss); border-color:rgba(231,76,60,0.3)"
+          aria-label="Delete this holding"
+        >
+          🗑 Delete This Holding
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SCRIPTS ═════════════════════ -->
+<script type="module" src="./assets/app.js"></script>
+
+</body>
+</html>
