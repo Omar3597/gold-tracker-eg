@@ -6,7 +6,7 @@ import { getCurrentGoldPrices, diffAgainstLastVisit } from './gold-price.js';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 const STORAGE_KEY  = 'goldHoldings';
-const KARAT_LABELS = { 24: 'عيار 24', 22: 'عيار 22', 21: 'عيار 21', 18: 'عيار 18' };
+const KARAT_LABELS = { 24: 'K24', 22: 'K22', 21: 'K21', 18: 'K18' };
 
 // ─── State ───────────────────────────────────────────────────────────────────
 let priceData   = null;   // from getCurrentGoldPrices()
@@ -141,7 +141,7 @@ function renderSinceLastVisit() {
       // First visit for this karat
       cards.push(`
         <div class="first-visit-note">
-          عيار ${karat} — First visit recorded. Changes will show next time you open the app.
+          K${karat} — First visit recorded. Changes will show next time you open the app.
         </div>
       `);
     } else {
