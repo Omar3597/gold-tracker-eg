@@ -1,29 +1,29 @@
 {
   "source": "iSagha (market.isagha.com)",
   "sourceUrl": "https://market.isagha.com/prices/eg",
-  "fetchedAt": "2026-08-25T15:41:04.709Z",
+  "fetchedAt": "2026-08-25T16:36:29.375Z",
   "currency": "EGP",
   "unit": "gram",
   "karats": {
     "k24": {
       "karat": 24,
-      "sellPerGram": 7520,
-      "buyPerGram": 7451.5
+      "sellPerGram": 7525.75,
+      "buyPerGram": 7457.25
     },
     "k22": {
       "karat": 22,
-      "sellPerGram": 6893.25,
-      "buyPerGram": 6830.5
+      "sellPerGram": 6898.5,
+      "buyPerGram": 6835.75
     },
     "k21": {
       "karat": 21,
-      "sellPerGram": 6580,
-      "buyPerGram": 6520
+      "sellPerGram": 6585,
+      "buyPerGram": 6525
     },
     "k18": {
       "karat": 18,
-      "sellPerGram": 5640,
-      "buyPerGram": 5588.5
+      "sellPerGram": 5644.25,
+      "buyPerGram": 5592.75
     },
     "k999": {
       "karat": 999,
