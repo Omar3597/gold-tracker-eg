@@ -1,54 +1,54 @@
 {
   "source": "iSagha (market.isagha.com)",
   "sourceUrl": "https://market.isagha.com/prices/eg",
-  "fetchedAt": "2026-08-29T10:50:15.038Z",
+  "fetchedAt": "2026-08-29T15:30:06.882Z",
   "currency": "EGP",
   "unit": "gram",
   "karats": {
     "k24": {
       "karat": 24,
-      "sellPerGram": 7262.75,
-      "buyPerGram": 7194.25
+      "sellPerGram": 7234.25,
+      "buyPerGram": 7160
     },
     "k22": {
       "karat": 22,
-      "sellPerGram": 6657.5,
-      "buyPerGram": 6594.75
+      "sellPerGram": 6631.5,
+      "buyPerGram": 6563.25
     },
     "k21": {
       "karat": 21,
-      "sellPerGram": 6355,
-      "buyPerGram": 6295
+      "sellPerGram": 6330,
+      "buyPerGram": 6265
     },
     "k18": {
       "karat": 18,
-      "sellPerGram": 5447.25,
-      "buyPerGram": 5395.75
+      "sellPerGram": 5425.75,
+      "buyPerGram": 5370
     },
     "k999": {
       "karat": 999,
-      "sellPerGram": 108.75,
-      "buyPerGram": 103.75
+      "sellPerGram": 108,
+      "buyPerGram": 103
     },
     "k925": {
       "karat": 925,
-      "sellPerGram": 100.75,
-      "buyPerGram": 96.25
+      "sellPerGram": 100,
+      "buyPerGram": 95.25
     },
     "k900": {
       "karat": 900,
-      "sellPerGram": 98,
-      "buyPerGram": 93.5
+      "sellPerGram": 97.25,
+      "buyPerGram": 92.75
     },
     "k800": {
       "karat": 800,
-      "sellPerGram": 87.25,
-      "buyPerGram": 83.25
+      "sellPerGram": 86.5,
+      "buyPerGram": 82.5
     },
     "k600": {
       "karat": 600,
-      "sellPerGram": 65.25,
-      "buyPerGram": 62.25
+      "sellPerGram": 64.75,
+      "buyPerGram": 61.75
     }
   }
 }
